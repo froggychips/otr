@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Подключение Яндекс</title>
+</head>
+<body>
+  <h3>Подключаемся... Закрой вкладку после успеха.</h3>
+  <script>
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const token = params.get('access_token');
+    const error = params.get('error');
+
+    if (token) {
+      chrome.runtime.sendMessage({
+        type: "YANDEX_TOKEN",
+        token: token
+      });
+      document.body.innerHTML = '<h3 style="color:green">Готово! Закрой вкладку.</h3>';
+    } else if (error) {
+      document.body.innerHTML = '<h3 style="color:red">Ошибка: ' + (params.get('error_description') || error) + '</h3>';
+    } else {
+      document.body.innerHTML = '<h3>Что-то сломалось...</h3>';
+    }
+  </script>
+</body>
+</html>
