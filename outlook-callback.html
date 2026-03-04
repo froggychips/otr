@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Outlook авторизация</title>
+</head>
+<body>
+    <h3>Подключаем Outlook...</h3>
+
+    <script>
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const token = params.get("access_token");
+        const error = params.get("error");
+
+        if (token) {
+            chrome.runtime.sendMessage({
+                type: "OUTLOOK_TOKEN_RECEIVED",
+                token: token
+            });
+            document.body.innerHTML = `<h3 style="color:green">✅ Успешно! Закрой вкладку.</h3>`;
+        } else if (error) {
+            document.body.innerHTML = `<h3 style="color:red">❌ Ошибка: ${error}</h3>`;
+        }
+    </script>
+</body>
+</html>
